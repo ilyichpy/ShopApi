@@ -5,10 +5,7 @@ import com.example.shopapi.repository.AddressRepository;
 import com.example.shopapi.response.ClientResponse;
 import com.example.shopapi.service.ClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.UUID;
@@ -41,6 +38,27 @@ public class ClientController {
 						.client(c)
 						.key(200)
 						.build();
+	}
+
+	@DeleteMapping("deleteUser")
+	public ClientResponse deleteUser(@PathVariable UUID id) {
+		Client c = clientService.deleteClient(id);
+		return ClientResponse.builder()
+				.message("User delete successfully")
+				.client(c)
+				.key(200)
+				.build();
+	}
+
+	@GetMapping("findUser")
+	public ClientResponse findUserByNameAndSurname(@PathVariable String name,
+										 @PathVariable String surname) {
+		Client c = clientService.findByNameAndSurname(name, surname);
+		return ClientResponse.builder()
+				.client(c)
+				.message("Success")
+				.key(200)
+				.build();
 	}
 
 }
