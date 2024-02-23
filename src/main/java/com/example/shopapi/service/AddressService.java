@@ -15,4 +15,7 @@ public class AddressService {
 		addressRepository.save(address);
 	}
 
+	public Address findAddressByAllArgs(String country, String city, String street) {
+		return addressRepository.findByCountryAndCityAndStreet(country, city, street).get();
+	}
 }

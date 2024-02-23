@@ -1,13 +1,16 @@
 package com.example.shopapi.controller;
 
+import com.example.shopapi.model.Address;
 import com.example.shopapi.model.Client;
 import com.example.shopapi.repository.AddressRepository;
 import com.example.shopapi.response.ClientResponse;
+import com.example.shopapi.service.AddressService;
 import com.example.shopapi.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @RestController
@@ -16,20 +19,17 @@ import java.util.UUID;
 public class ClientController {
 
 	private final ClientService clientService;
-	private final AddressRepository addressRepository;
+	private final AddressService addressService;
 
 	@PostMapping("saveUser")
-	public ClientResponse saveUser(@PathVariable String fistName,
-								   @PathVariable String lastName,
-								   @PathVariable String birthDate,
-								   @PathVariable String gender,
-								   @PathVariable UUID addressId) {
+	public ClientResponse saveUser(@RequestBody Client client) {
 		Client c = Client.builder()
-				.clientName(fistName)
-				.clientSurname(lastName)
-				.birthday(Date.valueOf(birthDate))
-				.gender(gender)
-				.addressId(addressRepository.findById(addressId).orElseThrow())
+				.clientName(client.getClientName())
+				.clientSurname(client.getClientSurname())
+				.birthday(client.getBirthday())
+				.gender(client.getGender())
+				.addressId(addressService.findAddressByAllArgs(client.getAddressId().getCountry(), client.getAddressId().getCity(), client.getAddressId().getStreet()))
+				.registrationDate(new Date())
 				.build();
 		clientService.saveClient(c);
 

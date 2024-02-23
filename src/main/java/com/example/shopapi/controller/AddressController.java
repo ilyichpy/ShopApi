@@ -13,7 +13,7 @@ public class AddressController {
 
 	private final AddressService addressService;
 
-	@PutMapping("addAddress")
+	@PostMapping("addAddress")
 	public AddressResponse saveAddress(@RequestBody Address a) {
 		Address address = Address.builder()
 				.country(a.getCountry())
