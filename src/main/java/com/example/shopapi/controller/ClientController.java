@@ -22,19 +22,19 @@ public class ClientController {
 
 	@PostMapping("saveUser")
 	public ClientResponse saveUser(@RequestBody Client client) {
-		Client c = Client.builder()
-				.clientName(client.getClientName())
-				.clientSurname(client.getClientSurname())
-				.birthday(client.getBirthday())
-				.gender(client.getGender())
-				.addressId(addressService.findAddressByAllArgs(client.getAddressId().getCountry(), client.getAddressId().getCity(), client.getAddressId().getStreet()))
-				.registrationDate(new Date())
-				.build();
-		clientService.saveClient(c);
 
+		client.setRegistrationDate(new Date());
+		clientService.saveClient(client);
+		if (client.isEmpty()) {
+			return ClientResponse.builder()
+					.message("Empty parameters")
+					.client(null)
+					.key(501)
+					.build();
+		}
 		return ClientResponse.builder()
 						.message("Successful")
-						.client(c)
+						.client(client)
 						.key(200)
 						.build();
 	}
@@ -67,6 +67,17 @@ public class ClientController {
 			return clientService.findAllWithPagination(PageRequest.of(offset, limit));
 		}
 		return clientService.findAll();
+	}
+
+	@PutMapping("updateAddress")
+	public ClientResponse updateUserAddress(@RequestBody Client client) {
+		addressService.addAddress(client.getAddressId());
+		clientService.updateClientAddress(clientService.findById(client.getId()), client.getAddressId());
+		return ClientResponse.builder()
+				.message("Alright")
+				.client(clientService.findById(client.getId()))
+				.key(200)
+				.build();
 	}
 
 }

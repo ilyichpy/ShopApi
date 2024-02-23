@@ -15,15 +15,17 @@ public class AddressController {
 
 	@PostMapping("addAddress")
 	public AddressResponse saveAddress(@RequestBody Address a) {
-		Address address = Address.builder()
-				.country(a.getCountry())
-				.city(a.getCity())
-				.street(a.getStreet())
-				.build();
-		addressService.addAddress(address);
+		if (a.isEmpty()) {
+			return AddressResponse.builder()
+					.message("Empty parameters")
+					.key(501)
+					.address(null)
+					.build();
+		}
+		addressService.addAddress(a);
 		return AddressResponse.builder()
 				.message("Successfully add address")
-				.address(address)
+				.address(a)
 				.key(200)
 				.build();
 	}

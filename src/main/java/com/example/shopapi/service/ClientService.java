@@ -1,5 +1,6 @@
 package com.example.shopapi.service;
 
+import com.example.shopapi.model.Address;
 import com.example.shopapi.model.Client;
 import com.example.shopapi.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +36,15 @@ public class ClientService {
 
 	public List<Client> findAll() {
 		return clientRepository.findAll();
+	}
+
+	public void updateClientAddress(Client client, Address address) {
+		client.setAddressId(address);
+		clientRepository.save(client);
+	}
+
+	public Client findById(UUID id) {
+		return clientRepository.findById(id).get();
+
 	}
 }

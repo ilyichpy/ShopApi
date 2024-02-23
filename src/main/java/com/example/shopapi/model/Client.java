@@ -40,4 +40,9 @@ public class Client {
     @JoinColumn(name = "address_id")
     private Address addressId;
 
+   public boolean isEmpty() {
+	   return this.clientName.isEmpty() || this.clientSurname.isEmpty()
+			   || this.birthday == null || this.gender.isEmpty()
+			   || addressId.isEmpty();
+   }
 }
