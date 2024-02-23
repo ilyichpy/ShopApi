@@ -10,6 +10,7 @@ import java.util.UUID;
 public class Product {
 
     @Id
+    @Column(name = "id", unique = true)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
@@ -23,18 +24,12 @@ public class Product {
     @Column(name = "last_update_date")
     private Date lastUpdateDate;
 
-    @Column(name = "suplier_id")
-    private UUID suplierId;
-    // Товар
-//    product
-//    {
-//        id
-//                name
-//        category
-//                price
-//        available_stock // число закупленных экземпляров товара
-//                last_update_date // число последней закупки
-//        supplier_id
-//        image_id: UUID
-//    }
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client supplier;
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Images imageID;
+
 }

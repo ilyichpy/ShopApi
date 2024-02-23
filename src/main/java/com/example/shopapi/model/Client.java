@@ -2,15 +2,24 @@ package com.example.shopapi.model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
 @Table(name = "client")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Client {
 
     @Id
+    @Column(name = "id", unique = true)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
@@ -27,7 +36,8 @@ public class Client {
     @Column(name = "registration_date")
     private Date registrationDate;
 
-    @Column(name = "address_id")
-    private UUID addressId;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address addressId;
 
 }
