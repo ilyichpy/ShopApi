@@ -3,8 +3,10 @@ package com.example.shopapi.service;
 import com.example.shopapi.model.Client;
 import com.example.shopapi.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,5 +27,13 @@ public class ClientService {
 
 	public Client findByNameAndSurname(String name, String surname) {
 		return clientRepository.findByClientNameAndClientSurname(name, surname).get();
+	}
+
+	public List<Client> findAllWithPagination(PageRequest p) {
+		return clientRepository.findAll(p).stream().toList();
+	}
+
+	public List<Client> findAll() {
+		return clientRepository.findAll();
 	}
 }

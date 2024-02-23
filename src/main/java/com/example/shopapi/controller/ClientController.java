@@ -1,16 +1,15 @@
 package com.example.shopapi.controller;
 
-import com.example.shopapi.model.Address;
 import com.example.shopapi.model.Client;
-import com.example.shopapi.repository.AddressRepository;
 import com.example.shopapi.response.ClientResponse;
 import com.example.shopapi.service.AddressService;
 import com.example.shopapi.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -59,6 +58,15 @@ public class ClientController {
 				.message("Success")
 				.key(200)
 				.build();
+	}
+
+	@GetMapping("allClients")
+	public List<Client> findAll(@RequestParam(defaultValue = "0") int offset,
+								@RequestParam(defaultValue = "0") int limit) {
+		if (limit != 0 || offset != 0) {
+			return clientService.findAllWithPagination(PageRequest.of(offset, limit));
+		}
+		return clientService.findAll();
 	}
 
 }

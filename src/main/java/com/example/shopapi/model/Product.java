@@ -14,8 +14,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "category")
     private String category;
 
     @Column(name = "available_stock")

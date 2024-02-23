@@ -12,5 +12,7 @@ public class Images {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 
+	@Lob
+	@Column(name = "image")
 	private byte[] image;
 }
