@@ -1,0 +1,11 @@
+version: '1.0'
+
+services:
+  shop_api_bd:
+    container_name: shop_api_bd
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=zuev
+      - POSTGRES_USER=postgres
+    image: postgres:14.11-bullseye

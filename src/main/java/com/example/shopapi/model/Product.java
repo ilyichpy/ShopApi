@@ -24,8 +24,6 @@ public class Product {
     private Date lastUpdateDate;
 
     @Column(name = "suplier_id")
-    @ManyToOne
-    @JoinColumn(name = "client.id")
     private UUID suplierId;
     // Товар
 //    product
