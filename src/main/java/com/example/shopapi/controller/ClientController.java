@@ -24,45 +24,31 @@ public class ClientController {
 	public ClientResponse saveUser(@RequestBody Client client) {
 		client.setRegistrationDate(new Date());
 		if (client.notEnoughInfo()) {
-			return ClientResponse.builder()
-					.message("Empty parameters")
-					.client(null)
-					.key(501)
-					.build();
+			return ClientResponse.builder().message("Empty parameters").client(null).key(501).build();
+		}
+
+		if (client.getAddress().getId() == null) {
+			client.setAddress(addressService.findAddressByAllArgs(client.getAddress().getCountry(), client.getAddress().getCity(), client.getAddress().getStreet()));
 		}
 
 		clientService.saveClient(client);
-		return ClientResponse.builder()
-				.message("Successful")
-				.client(client)
-				.key(200)
-				.build();
+		return ClientResponse.builder().message("Successful").client(client).key(200).build();
 	}
 
 	@DeleteMapping("deleteUser")
 	public ClientResponse deleteUser(@PathVariable UUID id) {
 		Client c = clientService.deleteClient(id);
-		return ClientResponse.builder()
-				.message("User delete successfully")
-				.client(c)
-				.key(200)
-				.build();
+		return ClientResponse.builder().message("User delete successfully").client(c).key(200).build();
 	}
 
 	@GetMapping("findUser")
-	public ClientResponse findUserByNameAndSurname(@PathVariable String name,
-												   @PathVariable String surname) {
+	public ClientResponse findUserByNameAndSurname(@PathVariable String name, @PathVariable String surname) {
 		Client c = clientService.findByNameAndSurname(name, surname);
-		return ClientResponse.builder()
-				.client(c)
-				.message("Success")
-				.key(200)
-				.build();
+		return ClientResponse.builder().client(c).message("Success").key(200).build();
 	}
 
 	@GetMapping("allClients")
-	public List<Client> findAll(@RequestParam(defaultValue = "0") int offset,
-								@RequestParam(defaultValue = "0") int limit) {
+	public List<Client> findAll(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "0") int limit) {
 		if (limit != 0 || offset != 0) {
 			return clientService.findAllWithPagination(PageRequest.of(offset, limit));
 		}
@@ -71,13 +57,17 @@ public class ClientController {
 
 	@PutMapping("updateAddress")
 	public ClientResponse updateUserAddress(@RequestBody Client client) {
-		addressService.addAddress(client.getAddressId());
-		clientService.updateClientAddress(clientService.findById(client.getId()), client.getAddressId());
-		return ClientResponse.builder()
-				.message("Alright")
-				.client(clientService.findById(client.getId()))
-				.key(200)
-				.build();
+		if (!addressService.saveAddressInBD(client.getAddress())) {
+			return ClientResponse.builder()
+					.message("Not enough info in address")
+					.key(501)
+					.client(null)
+					.build();
+		}
+		clientService.updateClientAddress(clientService.findById(client.getId()), addressService.findAddressByAllArgs(client.getAddress().getCountry()
+				, client.getAddress().getCity()
+				, client.getAddress().getStreet()));
+		return ClientResponse.builder().message("Alright").client(clientService.findById(client.getId())).key(200).build();
 	}
 
 }

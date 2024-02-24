@@ -15,14 +15,13 @@ public class AddressController {
 
 	@PostMapping("addAddress")
 	public AddressResponse saveAddress(@RequestBody Address a) {
-		if (a.notEnoughInfo()) {
+		if (!addressService.saveAddressInBD(a)) {
 			return AddressResponse.builder()
-					.message("Empty parameters")
+					.message("Invalid Address")
 					.key(501)
 					.address(null)
 					.build();
 		}
-		addressService.addAddress(a);
 		return AddressResponse.builder()
 				.message("Successfully add address")
 				.address(a)

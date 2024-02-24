@@ -39,12 +39,11 @@ public class ClientService {
 	}
 
 	public void updateClientAddress(Client client, Address address) {
-		client.setAddressId(address);
+		client.setAddress(address);
 		clientRepository.save(client);
 	}
 
 	public Client findById(UUID id) {
 		return clientRepository.findById(id).get();
-
 	}
 }

@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.UUID;
 
-@Entity
 @Table(name = "client")
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,11 +38,11 @@ public class Client {
 
     @ManyToOne
     @JoinColumn(name = "address_id")
-    private Address addressId;
+    private Address address;
 
    public boolean notEnoughInfo() {
 	   return this.clientName.isEmpty() || this.clientSurname.isEmpty()
 			   || this.birthday == null || this.gender.isEmpty()
-			   || addressId.notEnoughInfo();
+			   || address.notEnoughInfo();
    }
 }

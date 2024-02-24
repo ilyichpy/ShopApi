@@ -11,8 +11,15 @@ public class AddressService {
 
 	private final AddressRepository addressRepository;
 
-	public void addAddress(Address address) {
+	public boolean saveAddressInBD(Address address) {
+		if (address.notEnoughInfo()) {
+			return false;
+		}
+		if (addressRepository.findByCountryAndCityAndStreet(address.getCountry(), address.getCity(), address.getStreet()).isPresent()) {
+			return true;
+		}
 		addressRepository.save(address);
+		return true;
 	}
 
 	public Address findAddressByAllArgs(String country, String city, String street) {
