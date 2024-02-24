@@ -18,7 +18,7 @@ public class AddressController {
 		if (!addressService.saveAddressInBD(a)) {
 			return AddressResponse.builder()
 					.message("Invalid Address")
-					.key(501)
+					.key(404)
 					.address(null)
 					.build();
 		}

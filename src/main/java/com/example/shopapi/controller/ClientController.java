@@ -20,31 +20,49 @@ public class ClientController {
 	private final ClientService clientService;
 	private final AddressService addressService;
 
-	@PostMapping("saveUser")
+	@PostMapping("addClient")
 	public ClientResponse saveUser(@RequestBody Client client) {
 		client.setRegistrationDate(new Date());
 		if (client.notEnoughInfo()) {
-			return ClientResponse.builder().message("Empty parameters").client(null).key(501).build();
+			return ClientResponse.builder()
+					.message("Not enough info to create client")
+					.client(null)
+					.key(404)
+					.build();
 		}
 
-		if (client.getAddress().getId() == null) {
-			client.setAddress(addressService.findAddressByAllArgs(client.getAddress().getCountry(), client.getAddress().getCity(), client.getAddress().getStreet()));
+		if (addressService.findAddressByAllArgs(client.getAddress().getCountry(),
+				client.getAddress().getCity(),
+				client.getAddress().getStreet()) == null) {
+			addressService.saveAddressInBD(client.getAddress());
+		} else {
+			client.setAddress(addressService.findAddressByAllArgs(
+					client.getAddress().getCountry(),
+					client.getAddress().getCity(),
+					client.getAddress().getStreet()));
 		}
 
 		clientService.saveClient(client);
-		return ClientResponse.builder().message("Successful").client(client).key(200).build();
+		return ClientResponse.builder()
+				.message("Successfully crate client")
+				.client(client)
+				.key(200)
+				.build();
 	}
 
-	@DeleteMapping("deleteUser")
-	public ClientResponse deleteUser(@PathVariable UUID id) {
-		Client c = clientService.deleteClient(id);
-		return ClientResponse.builder().message("User delete successfully").client(c).key(200).build();
+	@DeleteMapping("deleteClient")
+	public ClientResponse deleteUser(@RequestBody Client client) {
+		Client c = clientService.deleteClient(client.getId());
+		return ClientResponse.builder()
+				.message("User delete successfully")
+				.client(c)
+				.key(200)
+				.build();
 	}
 
-	@GetMapping("findUser")
-	public ClientResponse findUserByNameAndSurname(@PathVariable String name, @PathVariable String surname) {
-		Client c = clientService.findByNameAndSurname(name, surname);
-		return ClientResponse.builder().client(c).message("Success").key(200).build();
+	@GetMapping("findClients")
+	public List<Client> findUserByNameAndSurname(@RequestBody Client client) {
+		return clientService.findByNameAndSurname(client.getClientName(), client.getClientSurname());
 	}
 
 	@GetMapping("allClients")
@@ -60,14 +78,18 @@ public class ClientController {
 		if (!addressService.saveAddressInBD(client.getAddress())) {
 			return ClientResponse.builder()
 					.message("Not enough info in address")
-					.key(501)
+					.key(404)
 					.client(null)
 					.build();
 		}
 		clientService.updateClientAddress(clientService.findById(client.getId()), addressService.findAddressByAllArgs(client.getAddress().getCountry()
 				, client.getAddress().getCity()
 				, client.getAddress().getStreet()));
-		return ClientResponse.builder().message("Alright").client(clientService.findById(client.getId())).key(200).build();
+		return ClientResponse.builder()
+				.message("Alright")
+				.client(clientService.findById(client.getId()))
+				.key(200)
+				.build();
 	}
 
 }

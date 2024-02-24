@@ -23,6 +23,6 @@ public class AddressService {
 	}
 
 	public Address findAddressByAllArgs(String country, String city, String street) {
-		return addressRepository.findByCountryAndCityAndStreet(country, city, street).get();
+		return addressRepository.findByCountryAndCityAndStreet(country, city, street).orElse(null);
 	}
 }

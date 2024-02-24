@@ -26,8 +26,8 @@ public class ClientService {
 		return c;
 	}
 
-	public Client findByNameAndSurname(String name, String surname) {
-		return clientRepository.findByClientNameAndClientSurname(name, surname).get();
+	public List<Client> findByNameAndSurname(String name, String surname) {
+		return clientRepository.findByClientNameAndClientSurname(name, surname);
 	}
 
 	public List<Client> findAllWithPagination(PageRequest p) {
