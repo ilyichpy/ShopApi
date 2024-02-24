@@ -22,21 +22,21 @@ public class ClientController {
 
 	@PostMapping("saveUser")
 	public ClientResponse saveUser(@RequestBody Client client) {
-
 		client.setRegistrationDate(new Date());
-		clientService.saveClient(client);
-		if (client.isEmpty()) {
+		if (client.notEnoughInfo()) {
 			return ClientResponse.builder()
 					.message("Empty parameters")
 					.client(null)
 					.key(501)
 					.build();
 		}
+
+		clientService.saveClient(client);
 		return ClientResponse.builder()
-						.message("Successful")
-						.client(client)
-						.key(200)
-						.build();
+				.message("Successful")
+				.client(client)
+				.key(200)
+				.build();
 	}
 
 	@DeleteMapping("deleteUser")
@@ -51,7 +51,7 @@ public class ClientController {
 
 	@GetMapping("findUser")
 	public ClientResponse findUserByNameAndSurname(@PathVariable String name,
-										 @PathVariable String surname) {
+												   @PathVariable String surname) {
 		Client c = clientService.findByNameAndSurname(name, surname);
 		return ClientResponse.builder()
 				.client(c)

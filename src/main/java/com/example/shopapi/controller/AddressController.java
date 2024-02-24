@@ -15,7 +15,7 @@ public class AddressController {
 
 	@PostMapping("addAddress")
 	public AddressResponse saveAddress(@RequestBody Address a) {
-		if (a.isEmpty()) {
+		if (a.notEnoughInfo()) {
 			return AddressResponse.builder()
 					.message("Empty parameters")
 					.key(501)

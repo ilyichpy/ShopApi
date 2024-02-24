@@ -1,11 +1,19 @@
 package com.example.shopapi.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Table(name = "supplier")
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Supplier {
 
 	@Id
@@ -20,4 +28,7 @@ public class Supplier {
 
 	private String phoneNUmber;
 
+	public boolean notEnoughInfoForSupplier() {
+		return this.name.isEmpty() || this.addressId.notEnoughInfo() || this.phoneNUmber.isEmpty();
+	}
 }

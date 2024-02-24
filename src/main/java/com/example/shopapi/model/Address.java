@@ -26,7 +26,7 @@ public class Address {
 
 	private String street;
 
-	public boolean isEmpty() {
+	public boolean notEnoughInfo() {
 		return this.country.isEmpty() || this.city.isEmpty() || this.street.isEmpty();
 	}
 }
