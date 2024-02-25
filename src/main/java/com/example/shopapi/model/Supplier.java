@@ -24,11 +24,11 @@ public class Supplier {
 
 	@ManyToOne
 	@JoinColumn(name = "address_id")
-	private Address addressId;
+	private Address address;
 
-	private String phoneNUmber;
+	private String phoneNumber;
 
 	public boolean notEnoughInfoForSupplier() {
-		return this.name.isEmpty() || this.addressId.notEnoughInfo() || this.phoneNUmber.isEmpty();
+		return this.name.isEmpty() || this.address.notEnoughInfo() || this.phoneNumber.isEmpty();
 	}
 }

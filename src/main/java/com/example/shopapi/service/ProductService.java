@@ -5,6 +5,7 @@ import com.example.shopapi.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,8 +15,8 @@ public class ProductService {
 
 	private final ProductRepository productRepository;
 
-	public Product findClientById(UUID id) {
-		return productRepository.findById(id).get();
+	public Product findProductById(UUID id) {
+		return productRepository.findById(id).orElse(null);
 	}
 
 	public boolean saveProductInDB(Product product) {
@@ -31,6 +32,7 @@ public class ProductService {
 			return false;
 		}
 		product.setAvailableStock(valueNew);
+		product.setLastUpdateDate(new Date());
 		productRepository.save(product);
 		return true;
 	}

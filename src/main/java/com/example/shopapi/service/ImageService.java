@@ -15,12 +15,12 @@ public class ImageService {
 	private final ImageRepository imageRepository;
 
 	public Images findImageById(UUID id) {
-		return imageRepository.findById(id).get();
+		return imageRepository.findById(id).orElse(null);
 	}
 
 	public boolean saveImageInDB(Images images) {
-		if (images.notEnoughInfoForImages()) {
-			return false;
+		if (imageRepository.findImagesByImage(images.getImage()).isPresent()) {
+			return true;
 		}
 		imageRepository.save(images);
 		return true;

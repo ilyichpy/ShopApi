@@ -23,9 +23,4 @@ public class Images {
 	@Lob
 	@Column(name = "image")
 	private byte[] image;
-
-	public boolean notEnoughInfoForImages() {
-		return image.length == 0;
-	}
-
 }

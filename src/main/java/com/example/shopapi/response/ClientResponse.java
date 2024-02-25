@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 public class ClientResponse {
 
 	private String message;
-	private Client client;
+	private Object client;
 	private int key;
 }

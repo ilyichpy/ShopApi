@@ -27,7 +27,7 @@ public class ClientController {
 			return ClientResponse.builder()
 					.message("Not enough info to create client")
 					.client(null)
-					.key(404)
+					.key(400)
 					.build();
 		}
 
@@ -61,16 +61,28 @@ public class ClientController {
 	}
 
 	@GetMapping("findClients")
-	public List<Client> findUserByNameAndSurname(@RequestBody Client client) {
-		return clientService.findByNameAndSurname(client.getClientName(), client.getClientSurname());
+	public ClientResponse findUserByNameAndSurname(@RequestBody Client client) {
+		return ClientResponse.builder()
+				.client(clientService.findByNameAndSurname(client.getClientName(), client.getClientSurname()))
+				.message("Ok")
+				.key(200)
+				.build();
 	}
 
 	@GetMapping("allClients")
-	public List<Client> findAll(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "0") int limit) {
+	public ClientResponse findAll(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "0") int limit) {
 		if (limit != 0 || offset != 0) {
-			return clientService.findAllWithPagination(PageRequest.of(offset, limit));
+			return ClientResponse.builder()
+					.client(clientService.findAllWithPagination(PageRequest.of(offset, limit)))
+					.message("Successfully find client with pagination")
+					.key(200)
+					.build();
 		}
-		return clientService.findAll();
+		return ClientResponse.builder()
+				.client(clientService.findAll())
+				.message("Successfully find all clents")
+				.key(200)
+				.build();
 	}
 
 	@PutMapping("updateAddress")
@@ -78,7 +90,7 @@ public class ClientController {
 		if (!addressService.saveAddressInBD(client.getAddress())) {
 			return ClientResponse.builder()
 					.message("Not enough info in address")
-					.key(404)
+					.key(400)
 					.client(null)
 					.build();
 		}
@@ -86,7 +98,7 @@ public class ClientController {
 				, client.getAddress().getCity()
 				, client.getAddress().getStreet()));
 		return ClientResponse.builder()
-				.message("Alright")
+				.message("Successfully update client's address")
 				.client(clientService.findById(client.getId()))
 				.key(200)
 				.build();

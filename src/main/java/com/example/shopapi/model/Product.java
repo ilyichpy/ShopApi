@@ -40,7 +40,7 @@ public class Product {
 
 	@ManyToOne
 	@JoinColumn(name = "image_id")
-	private Images imageID;
+	private Images images;
 
 	public boolean notEnoughInfoForProduct() {
 		return this.name.isEmpty() || this.category.isEmpty() || this.supplier.notEnoughInfoForSupplier();
